@@ -1,0 +1,31 @@
+{
+  "presets": ["react", "es2015", "stage-0"],
+  "env" : {
+    "development" : {
+      "presets": ["react-hmre"],
+      "plugins": [
+        [
+          "react-transform", {
+            "transforms": [
+              {
+                "transform": "react-transform-catch-errors",
+                // now go the imports!
+                "imports": [
+                  "react",
+                  "redbox-react"
+                ]
+              },
+              {
+                "transform": "react-transform-hmr",
+                // if you use React Native, pass  "react-native" instead:
+                "imports": ["react"],
+                // this is important for Webpack HMR:
+                "locals": ["module"]
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  }
+}
