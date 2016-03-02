@@ -43,7 +43,7 @@ export default class extends Component {
       height,
       resizing: undefined,
     });
-  }
+  };
 
   render() {
     const {props} = this;
