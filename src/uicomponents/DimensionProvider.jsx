@@ -1,23 +1,27 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'underscore.lifted';
 
 export default class extends Component {
   static propTypes = {
     children: PropTypes.object,
-    initHeight: PropTypes.number,
-    initWidth: PropTypes.number,
+    height: PropTypes.number,
+    width: PropTypes.number,
+    h: PropTypes.bool,
+    w: PropTypes.bool
   };
 
   static defaultProps = {
-    initWidth: 500,
-    initHeight: 500,
+    width: 500,
+    height: 500,
+    h: false,
+    w: false,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      width: props.initWidth,
-      height: props.initHeight,
+      ...(_.pick(props, 'width', 'height')),
       resizing: undefined,
     };
   }
@@ -38,9 +42,13 @@ export default class extends Component {
     const width = right - left;
     const height = bottom - top;
 
+    const update = {
+      height: this.props.h ? height : undefined,
+      width: this.props.w ? width : undefined,
+    };
+
     this.setState({
-      width,
-      height,
+      ...update,
       resizing: undefined,
     });
   };

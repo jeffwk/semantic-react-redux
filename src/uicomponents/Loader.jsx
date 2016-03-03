@@ -14,15 +14,32 @@ class Loader extends Component {
     text: PropTypes.string,
     name: PropTypes.string,
     loadingNames: PropTypes.array,
-    initialHeight: PropTypes.number,
+    height: PropTypes.number,
+    defaultHeight: PropTypes.number,
   };
 
   static defaultProps = {
     text: 'Loading...',
     loadingNames: [],
-    initialHeight: 200,
+    defaultHeight: 200,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+  }
+
+  componentDidUpdate() {
+    if (!this.state.loaded && !this.isLoading()) {
+      this.loadedOnce();
+    }
+  }
+
+  loadedOnce() {
+    this.setState({loaded: true});
+  }
 
   isLoading = (props = this.props) => {
     const {name, loadingNames} = props;
@@ -31,14 +48,25 @@ class Loader extends Component {
 
   render() {
     const {props} = this;
-    const {children, className, name, loadingNames, text, initialHeight} = props;
-    const loading = _(loadingNames).contains(name);
+    const {children, className, defaultHeight, text, height} = props;
 
-    const dimmerState = loading ? 'active' : 'disabled';
-    const height = loading ? initialHeight : undefined;
+    const style = {
+      height: (
+        _.lift(height)
+        .orElse(() => (
+          _.lift(this.state.loaded)
+          .map(() => '100%')
+          .orElse(() => defaultHeight)
+          .unlift()
+        ))
+        .unlift()
+      ),
+    };
+
+    const dimmerState = this.isLoading() ? 'active' : 'disabled';
 
     return (
-      <div className={className} style={{height}}>
+      <div className={className} style={style}>
         <div className={`ui ${dimmerState} large dimmer`}>
           <div className="ui text loader">
             <p>{text}</p>
