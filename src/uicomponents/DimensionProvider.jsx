@@ -4,7 +4,7 @@ import _ from 'underscore.lifted';
 
 export default class extends Component {
   static propTypes = {
-    children: PropTypes.object,
+    children: PropTypes.node,
     height: PropTypes.number,
     width: PropTypes.number,
     h: PropTypes.bool,
